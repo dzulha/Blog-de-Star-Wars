@@ -1,0 +1,115 @@
+/* ======================= comentario =========
+   Tema oscuro global + ajustes de tarjetas/imagenes para evitar parpadeo
+*/
+html, body {
+  background-color: #0f1113;       /* casi negro */
+  color: #e9ecef;                  /* texto claro */
+}
+
+/* Navbar y dropdown mejor integrados */
+.navbar-dark.bg-dark { background-color: #181b1f !important; }
+.dropdown-menu { background: #1f2328; color: #e9ecef; border-color: #343a40; }
+.dropdown-item { color: #e9ecef; }
+.dropdown-item:hover { background: #2a2f36; }
+
+/* Cards oscuras coherentes */
+.card.bg-dark { background: #1b1f24; }
+.card .btn.btn-primary { background: #2563eb; border-color: #2563eb; }
+.card .btn.btn-outline-warning { border-color: #f59e0b; color: #f59e0b; }
+.card .btn.btn-outline-warning:hover { background: #f59e0b; color: #1b1f24; }
+
+/* ======================= comentario =========
+   Reservamos espacio estable para las imágenes (evita salto/parpadeo)
+   3/2 funciona bien con VisualGuide. object-fit recorta sin deformar.
+*/
+.sw-card-img {
+  aspect-ratio: 3 / 2;
+  width: 100%;
+  object-fit: cover;
+  background: #2a2f36;            /* “skeleton” oscuro mientras carga */
+  border-bottom: 1px solid #343a40;
+}
+
+/* Títulos de sección tipo Databank */
+h2.text-danger { color: #e11d48 !important; }
+
+/* ======================= comentario =========
+   Autocompletar oscuro + miniaturas
+*/
+.sw-autocomplete {
+  background: #1f2328;       /* panel oscuro */
+  border-color: #343a40;
+  color: #e9ecef;
+}
+.sw-autocomplete .list-group-item {
+  background: transparent;
+  color: #e9ecef;
+  border-color: #2a2f36;
+}
+.sw-autocomplete .list-group-item:hover {
+  background: #2a2f36;
+}
+
+/* Miniatura de 40x40, cuadrada, sin deformar */
+.sw-thumb {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 0.25rem;
+  background: #2a2f36;
+  border: 1px solid #343a40;
+}
+
+/* Por estética: reduce padding de sugerencias */
+.sw-suggestion { padding-top: .5rem; padding-bottom: .5rem; }
+
+
+/* ======================= comentario =========
+   Tarjetas más altas: imagen grande + cuerpo cómodo
+*/
+.sw-card-img {
+  width: 100%;
+  height: 280px;           /* << más alto */
+  object-fit: cover;
+  background: #2a2f36;
+  border-bottom: 1px solid #343a40;
+}
+.sw-card-body {
+  min-height: 120px;       /* espacio para título + botones */
+}
+
+/* Sidebar izquierdo pegajoso */
+.sw-sidebar {
+  position: sticky;
+  top: 72px;               /* debajo de la navbar */
+}
+.sw-sidebar .list-group-item {
+  background: #1b1f24;
+  color: #e9ecef;
+  border-color: #2a2f36;
+}
+.sw-sidebar .list-group-item.active,
+.sw-sidebar .list-group-item:hover {
+  background: #2a2f36;
+  color: #fff;
+}
+
+
+/* ======================= comentario =========
+   Imagen de detalles: alta, responsiva y sin deformar
+*/
+.sw-detail-img {
+  width: 100%;
+  object-fit: cover;
+  background: #2a2f36;
+  border-radius: .5rem;
+  aspect-ratio: 4 / 5;     /* más alta en móviles/tablet */
+}
+
+/* En pantallas grandes la hacemos un poco más ancha y alta */
+@media (min-width: 992px) { /* lg */
+  .sw-detail-img {
+    aspect-ratio: 3 / 4;   /* alta pero más ancha en desktop */
+    max-height: 78vh;      /* no excede el alto de la ventana */
+  }
+}

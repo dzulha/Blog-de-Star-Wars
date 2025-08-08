@@ -1,0 +1,80 @@
+// ======================= comentario =========
+// Obtiene un extracto corto de Wikipedia con varios intentos y cache de 30 días.
+
+const CACHE_KEY = "wiki-extracts-v2";
+const TTL_MS = 1000 * 60 * 60 * 24 * 30;
+
+const normKey = (t, n) => `${t}:${String(n || "").trim().toLowerCase()}`;
+
+function readCache() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return { at: Date.now(), data: {} };
+    const obj = JSON.parse(raw);
+    if (Date.now() - (obj.at || 0) > TTL_MS) return { at: Date.now(), data: {} };
+    return obj;
+  } catch {
+    return { at: Date.now(), data: {} };
+  }
+}
+function writeCache(obj) {
+  try { localStorage.setItem(CACHE_KEY, JSON.stringify(obj)); } catch {}
+}
+
+// ======================= comentario =========
+// Intenta REST summary: /page/summary/<title>
+async function tryRestSummary(title) {
+  const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}?redirect=true`;
+  const res = await fetch(url);
+  if (!res.ok) return null;
+  const j = await res.json();
+  // descartamos resúmenes que no tengan extract
+  if (!j?.extract) return null;
+  return j.extract;
+}
+
+// ======================= comentario =========
+// Fallback antiguo: action=query con extracts
+async function tryLegacyExtract(title) {
+  const url =
+    `https://en.wikipedia.org/w/api.php?action=query` +
+    `&prop=extracts&exintro=1&explaintext=1&redirects=1` +
+    `&titles=${encodeURIComponent(title)}&format=json&origin=*`;
+  const res = await fetch(url);
+  if (!res.ok) return null;
+  const j = await res.json();
+  const pages = j?.query?.pages || {};
+  const first = Object.values(pages)[0];
+  return first?.extract || null;
+}
+
+/**
+ * Devuelve un texto corto para mostrar en detalles.
+ * Para people funciona muy bien con "<name> (Star Wars)".
+ */
+export async function getWikiExtractByName(name, type) {
+  if (!name) return null;
+
+  const key = normKey(type, name);
+  const cache = readCache();
+  if (key in cache.data) return cache.data[key];
+
+  let extract = null;
+  try {
+    // 1) REST summary con "(Star Wars)"
+    extract = await tryRestSummary(`${name} (Star Wars)`);
+    // 2) REST summary sin sufijo
+    if (!extract) extract = await tryRestSummary(name);
+    // 3) Fallback legacy
+    if (!extract) extract = await tryLegacyExtract(`${name} (Star Wars)`);
+    if (!extract) extract = await tryLegacyExtract(name);
+  } catch {
+    /* noop */
+  }
+
+  cache.data[key] = extract || null;
+  cache.at = Date.now();
+  writeCache(cache);
+
+  return extract;
+}

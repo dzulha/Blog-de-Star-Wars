@@ -1,9 +1,3 @@
-// ======================= comentario =========
-// Centraliza la selección de imágenes por tipo.
-// - people: Akabab por NOMBRE
-// - planets/vehicles: Wikipedia por NOMBRE con ranking
-// Si no hay, cae a placeholder.
-
 import { getAkababImageByName } from "./akabab";
 import { getWikiThumbByName } from "./Wiki";
 
@@ -19,7 +13,7 @@ export async function bestImageUrl(type, name, uid) {
   }
 
   if (type === "planets" || type === "vehicles") {
-    const wiki = await getWikiThumbByName(name, type);   // <<< PASAMOS type
+    const wiki = await getWikiThumbByName(name, type);
     return wiki || placeholder(type, uid);
   }
 

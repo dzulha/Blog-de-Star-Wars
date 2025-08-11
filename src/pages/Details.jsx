@@ -4,8 +4,7 @@ import { useParams } from "react-router-dom";
 import useRotatingImageSrc from "../utils/useRotatingImageSrc";
 import { getWikiExtractByName } from "../utils/wikiExtract";
 
-// ======================= comentario =========
-// Endpoints de SWAPI.tech por tipo
+// =======================  =========
 const ENDPOINTS = {
   people: "https://www.swapi.tech/api/people",
   planets: "https://www.swapi.tech/api/planets",
@@ -13,25 +12,21 @@ const ENDPOINTS = {
 };
 
 export default function Details() {
-  // ======================= comentario =========
-  // Params de la ruta: /details/:type/:uid
+  // =======================  =========
   const { type, uid } = useParams();
 
-  // ======================= comentario =========
-  // Estado de datos y UI
-  const [data, setData] = useState(null);     // respuesta cruda de SWAPI (result)
+  // =======================  =========
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");     // mensaje de error opcional
-  const [extract, setExtract] = useState(""); // descripción de Wikipedia
+  const [error, setError] = useState("");
+  const [extract, setExtract] = useState("");
 
-  // ======================= comentario =========
-  // Fetch de detalles (seguro, con abort y manejo de errores)
   useEffect(() => {
     let abort = false;
     setLoading(true);
     setError("");
     setData(null);
-    setExtract(""); // limpiamos la descripción al cambiar de item
+    setExtract("");
 
     (async () => {
       try {
@@ -51,17 +46,14 @@ export default function Details() {
     return () => { abort = true; };
   }, [type, uid]);
 
-  // ======================= comentario =========
-  // Derivamos el nombre una vez que hay datos (people.name o films.title)
+  // =======================  =========
   const name =
     (data?.properties?.name || data?.properties?.title || "").toString();
 
-  // ======================= comentario =========
-  // Imagen a partir de (type, name, uid); usa placeholder si falla
+  // =======================  =========
   const { src, onError } = useRotatingImageSrc(type, name, uid);
 
-  // ======================= comentario =========
-  // Cargar extracto de Wikipedia (1-3 líneas) cuando ya tenemos el nombre
+  // =======================  =========
   useEffect(() => {
     let abort = false;
     if (!name) return;
@@ -71,15 +63,13 @@ export default function Details() {
         const txt = await getWikiExtractByName(name, type);
         if (!abort && txt) setExtract(txt);
       } catch {
-        /* si falla, simplemente no mostramos extracto */
       }
     })();
 
     return () => { abort = true; };
   }, [type, name]);
 
-  // ======================= comentario =========
-  // Estados de carga / error
+  // =======================  =========
   if (loading) {
     return (
       <div className="container mt-4 text-center">
@@ -96,30 +86,29 @@ export default function Details() {
     );
   }
 
-  // ======================= comentario =========
-  // Render principal
+  // =======================  =========
   const props = data.properties || {};
 
   return (
     <div className="container mt-4">
       <div className="row g-3">
-        {/* ======================= comentario ========= Imagen grande (col izquierda) */}
+        {/* =======================  ========= Imagen grande */}
         <div className="col-12 col-lg-5">
           <img
-            className="sw-detail-img"   // <-- define estilos en styles.css
+            className="sw-detail-img"
             src={src}
             alt={name || "Item image"}
             onError={onError}
           />
         </div>
 
-        {/* ======================= comentario ========= Título + descripción + specs (col derecha) */}
+        {/* =======================  ========= Título  */}
         <div className="col-12 col-lg-7">
           <h2 className="text-light bg-dark p-3 rounded">
             {(name || "—").toUpperCase()}
           </h2>
 
-          {/* ======================= comentario ========= Descripción (Wikipedia) si existe */}
+          {/* =======================  ========= Descripción (Wikipedia) */}
           {extract && (
             <div className="bg-dark text-light p-3 rounded border border-secondary mb-3">
               <p className="mb-0" style={{ whiteSpace: "pre-line" }}>{extract}</p>
@@ -129,7 +118,7 @@ export default function Details() {
           <div className="bg-dark text-light p-3 rounded border border-secondary">
             <div className="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
 
-              {/* ======================= comentario ========= Campos: PEOPLE */}
+              {/* =======================  ========= PEOPLE */}
               {type === "people" && (
                 <>
                   <Spec label="GENDER" value={props.gender} />
@@ -141,7 +130,7 @@ export default function Details() {
                 </>
               )}
 
-              {/* ======================= comentario ========= Campos: PLANETS */}
+              {/* =======================  ========= PLANETS */}
               {type === "planets" && (
                 <>
                   <Spec label="CLIMATE" value={props.climate} />
@@ -153,7 +142,7 @@ export default function Details() {
                 </>
               )}
 
-              {/* ======================= comentario ========= Campos: VEHICLES */}
+              {/* =======================  =========  VEHICLES */}
               {type === "vehicles" && (
                 <>
                   <Spec label="MODEL" value={props.model} />
@@ -173,8 +162,7 @@ export default function Details() {
   );
 }
 
-// ======================= comentario =========
-// Celda de especificación reusable
+// =======================  =========
 function Spec({ label, value }) {
   return (
     <div className="col">

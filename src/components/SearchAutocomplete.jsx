@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useRotatingImageSrc from "../utils/useRotatingImageSrc";
 
-// ======================= comentario =========
+// =======================  =========
 // Endpoints por tipo (SWAPI.tech)
 const ENDPOINTS = {
   people: "https://www.swapi.tech/api/people",
@@ -11,8 +11,7 @@ const ENDPOINTS = {
   vehicles: "https://www.swapi.tech/api/vehicles",
 };
 
-// ======================= comentario =========
-// Helper de búsqueda: intenta ?name= y luego ?search= (por compatibilidad)
+// =======================  =========
 async function searchResource(baseUrl, q, limit = 5) {
   if (!q) return [];
   try {
@@ -30,18 +29,17 @@ async function searchResource(baseUrl, q, limit = 5) {
   return [];
 }
 
-// ======================= COMPONENTE =========
+// =======================  =========
 export default function SearchAutocomplete() {
-  const [q, setQ] = useState("");                       // ======================= comentario ========= Valor del input
-  const [open, setOpen] = useState(false);              // ======================= comentario ========= Panel visible
-  const [loading, setLoading] = useState(false);        // ======================= comentario ========= Estado de búsqueda
-  const [results, setResults] = useState([]);           // ======================= comentario ========= [{type, uid, name}]
+  const [q, setQ] = useState("");
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState([]);
   const boxRef = useRef(null);
   const debounceRef = useRef(null);
   const nav = useNavigate();
 
-  // ======================= comentario =========
-  // Cerrar el panel cuando se hace clic fuera del componente
+  // =======================  =========
   useEffect(() => {
     function onClick(e) {
       if (boxRef.current && !boxRef.current.contains(e.target)) setOpen(false);
@@ -50,8 +48,7 @@ export default function SearchAutocomplete() {
     return () => document.removeEventListener("click", onClick);
   }, []);
 
-  // ======================= comentario =========
-  // Debounce de 300ms para no saturar la API mientras el usuario escribe
+  // =======================  =========
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
@@ -70,8 +67,7 @@ export default function SearchAutocomplete() {
           searchResource(ENDPOINTS.vehicles, q, 5),
         ]);
 
-        // ======================= comentario =========
-        // Normalizamos a un arreglo único y limitamos a 10 sugerencias
+        // =======================  =========
         const norm = [
           ...pp.map((x) => ({ type: "people", uid: x.uid, name: x.name })),
           ...pl.map((x) => ({ type: "planets", uid: x.uid, name: x.name })),
@@ -88,8 +84,7 @@ export default function SearchAutocomplete() {
     return () => clearTimeout(debounceRef.current);
   }, [q]);
 
-  // ======================= comentario =========
-  // Navega a la vista de detalle, cierra el panel y limpia el input
+  // =======================  =========
   const go = (r) => {
     nav(`/details/${r.type}/${r.uid}`);
     setOpen(false);
@@ -120,8 +115,7 @@ export default function SearchAutocomplete() {
           {!loading && results.length > 0 && (
             <ul className="list-group list-group-flush">
               {results.map((r) => {
-                // ======================= comentario =========
-                // Imagen por nombre (people) y placeholder para lo demás.
+                // =======================  =========
                 const { src, onError } = useRotatingImageSrc(r.type, r.name, r.uid);
 
                 return (

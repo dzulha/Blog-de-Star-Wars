@@ -1,9 +1,6 @@
 // ======================= comentario =========
-// Busca una miniatura en Wikipedia/Wikimedia por nombre,
-// sesgada a Star Wars y al tipo (planets/vehicles). Cachea 30 días.
-
 const CACHE_KEY = "wiki-thumbs-v2";
-const TTL_MS = 1000 * 60 * 60 * 24 * 30; // 30 días
+const TTL_MS = 1000 * 60 * 60 * 24 * 30; 
 
 const norm = (s) => String(s || "").trim().toLowerCase();
 
@@ -23,19 +20,16 @@ function writeCache(obj) {
 }
 
 /**
- * Devuelve URL de miniatura o null.
- * @param {string} name - Ej: "Tatooine", "AT-AT"
+ * @param {string} name 
  * @param {"planets"|"vehicles"} type
  */
 export async function getWikiThumbByName(name, type) {
   if (!name) return null;
   const key = `${type}:${norm(name)}`;
 
-  // 1) Cache
   const cache = readCache();
   if (key in cache.data) return cache.data[key];
 
-  // 2) Consultamos 5 resultados y elegimos el mejor
   const qName = encodeURIComponent(name);
   const search = `(${qName} (Star Wars)) OR (${qName} Star Wars) OR (${qName})`;
   const url =

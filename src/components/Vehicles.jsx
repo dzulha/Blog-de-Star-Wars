@@ -3,11 +3,11 @@ import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../context/AppContext";
 import ItemCard from "./ItemCard";
 
-// ======================= comentario =========
+// =======================  =========
 // Clave para cache en localStorage
 const CACHE_KEY = "sw-cache-vehicles";
 
-// ======================= comentario =========
+// =======================  =========
 // Helper para eliminar duplicados por uid
 const dedupByUid = (arr = []) => {
   const map = new Map();
@@ -15,7 +15,7 @@ const dedupByUid = (arr = []) => {
   return Array.from(map.values());
 };
 
-// ======================= COMPONENTE =========
+// =======================  =========
 const Vehicles = ({ pageSize = 12 }) => {
   const { actions } = useContext(Context);
 
@@ -25,8 +25,7 @@ const Vehicles = ({ pageSize = 12 }) => {
   const [done, setDone] = useState(false);
   const [skipFetch, setSkipFetch] = useState(false);
 
-  // ======================= comentario =========
-  // 1) Leer cache (una sola vez) y limpiar duplicados
+  // =======================  =========
   useEffect(() => {
     const cached = localStorage.getItem(CACHE_KEY);
     if (cached) {
@@ -40,8 +39,7 @@ const Vehicles = ({ pageSize = 12 }) => {
     }
   }, []);
 
-  // ======================= comentario =========
-  // 2) Fetch por página + merge sin duplicados + guardar cache
+  // =======================  =========
   useEffect(() => {
     if (skipFetch) { setSkipFetch(false); return; }
 

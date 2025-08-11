@@ -1,6 +1,6 @@
 # 🚀 StarWars Blog App
 
-Aplicación web desarrollada con **React** que consume la API de [SWAPI.tech](https://www.swapi.tech/) y muestra información detallada sobre **personajes**, **planetas** y **vehículos** del universo de Star Wars.  
+Aplicación web desarrollada con **React** que consume la API de [SWAPI.tech](https://www.swapi.tech/) y muestra información detallada sobre **personajes**, **planetas** y **vehículos** del universo de Star Wars.
 Incluye integración con **Wikipedia** para añadir descripciones enriquecidas, imágenes dinámicas y un sistema de favoritos persistente.
 
 ## ⭐ Características principales

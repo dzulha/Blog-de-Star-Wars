@@ -1,5 +1,4 @@
-// ======================= comentario =========
-// Navbar global con: buscador con autocompletar + dropdown de favoritos + botón Clear
+// =======================  =========
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { Context } from "../context/AppContext";
@@ -11,15 +10,15 @@ export default function Navbar() {
   return (
     <nav className="navbar navbar-dark bg-dark">
       <div className="container gap-3">
-        {/* ======================= comentario ========= Branding y Home */}
+        {/* =======================  ========= Branding y Home */}
         <Link className="navbar-brand" to="/">StarWarsBlog</Link>
 
-        {/* ======================= comentario ========= Buscador con autocompletar */}
+        {/* =======================  ========= Buscador con autocompletar */}
         <div className="flex-grow-1" style={{ maxWidth: 520 }}>
           <SearchAutocomplete />
         </div>
 
-        {/* ======================= comentario ========= Dropdown de favoritos */}
+        {/* =======================  ========= Dropdown de favoritos */}
         <div className="dropdown">
           <button className="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
             Favorites <span className="badge bg-warning text-dark ms-1">{store.favorites.length}</span>
@@ -45,7 +44,7 @@ export default function Navbar() {
               </li>
             ))}
 
-            {/* ======================= comentario ========= Separador + botón Clear */}
+            {/* =======================  ========= Separador  */}
             {store.favorites.length > 0 && (
               <>
                 <li><hr className="dropdown-divider" /></li>

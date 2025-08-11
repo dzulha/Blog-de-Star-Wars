@@ -1,5 +1,4 @@
-// ======================= comentario =========
-// Sidebar con links a las categorías, estilo Bootstrap
+// =======================  =========
 import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {

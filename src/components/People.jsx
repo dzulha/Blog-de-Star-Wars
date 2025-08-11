@@ -3,12 +3,11 @@ import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../context/AppContext";
 import ItemCard from "./ItemCard";
 
-// ======================= comentario =========
+// =======================  =========
 // Clave para cache en localStorage
 const CACHE_KEY = "sw-cache-people";
 
-// ======================= comentario =========
-// Helper para eliminar duplicados por uid
+// =======================  =========
 const dedupByUid = (arr = []) => {
   const map = new Map();
   for (const x of arr) map.set(x.uid, x);
@@ -20,30 +19,27 @@ const People = ({ pageSize = 12 }) => {
   const { actions } = useContext(Context);
 
   const [items, setItems] = useState([]);
-  const [page, setPage] = useState(1);               // ======================= comentario ========= Página actual
-  const [loading, setLoading] = useState(false);     // ======================= comentario ========= Spinner al cargar
-  const [done, setDone] = useState(false);           // ======================= comentario ========= No hay más resultados
-  const [skipFetch, setSkipFetch] = useState(false); // ======================= comentario ========= Evitar refetch si cargamos desde cache
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(false);
+  const [skipFetch, setSkipFetch] = useState(false);
 
-  // ======================= comentario =========
-  // 1) Intento recuperar del cache (si existe) SOLO una vez al montar
+  // =======================  =========
   useEffect(() => {
     const cached = localStorage.getItem(CACHE_KEY);
     if (cached) {
       const { items: cachedItems = [], page: cachedPage = 1, done: cachedDone = false } = JSON.parse(cached);
-      const clean = dedupByUid(cachedItems);           // <<< limpiar duplicados del cache
+      const clean = dedupByUid(cachedItems);
       setItems(clean);
       setPage(cachedPage);
       setDone(!!cachedDone);
       setSkipFetch(true);
 
-      // Guarda el cache limpio por si estaba sucio
       localStorage.setItem(CACHE_KEY, JSON.stringify({ items: clean, page: cachedPage, done: cachedDone }));
     }
   }, []);
 
-  // ======================= comentario =========
-  // 2) Cuando cambie `page`, traemos esa página y MERGEMOS resultados deduplicando
+  // =======================  =========
   useEffect(() => {
     if (skipFetch) { setSkipFetch(false); return; }
 
@@ -55,7 +51,7 @@ const People = ({ pageSize = 12 }) => {
         const next = data.results || [];
 
         setItems((prev) => {
-          const merged = dedupByUid([...prev, ...next]);  // <<< merge sin duplicados
+          const merged = dedupByUid([...prev, ...next]);
           localStorage.setItem(
             CACHE_KEY,
             JSON.stringify({ items: merged, page, done: next.length < pageSize })

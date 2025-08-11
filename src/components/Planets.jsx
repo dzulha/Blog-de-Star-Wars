@@ -3,12 +3,10 @@ import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../context/AppContext";
 import ItemCard from "./ItemCard";
 
-// ======================= comentario =========
-// Clave para cache en localStorage
+// =======================  =========
 const CACHE_KEY = "sw-cache-planets";
 
-// ======================= comentario =========
-// Helper para eliminar duplicados por uid
+// =======================  =========
 const dedupByUid = (arr = []) => {
   const map = new Map();
   for (const x of arr) map.set(x.uid, x);
@@ -25,8 +23,7 @@ const Planets = ({ pageSize = 12 }) => {
   const [done, setDone] = useState(false);
   const [skipFetch, setSkipFetch] = useState(false);
 
-  // ======================= comentario =========
-  // 1) Leer cache (una sola vez) y limpiar duplicados
+  // =======================  =========
   useEffect(() => {
     const cached = localStorage.getItem(CACHE_KEY);
     if (cached) {
@@ -40,8 +37,7 @@ const Planets = ({ pageSize = 12 }) => {
     }
   }, []);
 
-  // ======================= comentario =========
-  // 2) Fetch por página + merge sin duplicados + guardar cache
+  // =======================  =========
   useEffect(() => {
     if (skipFetch) { setSkipFetch(false); return; }
 
